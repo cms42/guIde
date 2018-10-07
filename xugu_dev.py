@@ -163,14 +163,13 @@ class Pin:
         :param port: 虚谷连接arduino的COM口，默认为"/dev/ttyACM0"
         :param debug: 当为True的时候，会输出debug信息
         """
-        #pin_num, _pin_type = check_pin_num(pin_num)
-        #if not pin_type:
-        #    pin_type = _pin_type
-        #self.pin_num = pin_num
+        pin_num, _pin_type = check_pin_num(pin_num)
+        if not pin_type:
+            pin_type = _pin_type
+        self.pin_num = pin_num
         #self.board = PyMata(port, bluetooth=False, verbose=debug)
         #self.board.set_pin_mode(self.pin_num, pin_model, pin_type)
         print( '正在初始化新的阵脚（Pin）')
-        print 'self:',self
         print 'pin_num:',pin_num
         print 'pin_model:',pin_model
         print 'pin_type:',pin_type
@@ -183,7 +182,7 @@ class Pin:
         :return: 
         """
         #self.board.digital_write(self.pin_num, 1)
-        print '正在将阵脚',pin_num,'输出设置为高  [high()]'
+        print '正在将阵脚',self.pin_num,'输出设置为高  [high()]'
 
     def on(self):
         """
@@ -191,7 +190,7 @@ class Pin:
         :return:
         """
         #self.board.digital_write(self.pin_num, 1)
-        print '正在将阵脚',pin_num,'输出设置为高  [on()]'
+        print '正在将阵脚',self.pin_num,'输出设置为高  [on()]'
 
     def low(self):
         """
@@ -199,7 +198,7 @@ class Pin:
         :return: 
         """
         """self.board.digital_write(self.pin_num, 0)"""
-        print '正在将阵脚',pin_num,'输出设置为低  [low()]'
+        print '正在将阵脚',self.pin_num,'输出设置为低  [low()]'
 
     def off(self):
         """
@@ -207,14 +206,14 @@ class Pin:
         :return:
         """
         #self.board.digital_write(self.pin_num, 0)
-        print '正在将阵脚',pin_num,'输出设置为低  [off()]'
+        print '正在将阵脚',self.pin_num,'输出设置为低  [off()]'
 
     def value(self):
         """
         获取数字信号电位值
         :return: 
         """
-        print '正在获取阵脚',pin_num,'的电位值，然而开发模式没有实体硬件'
+        print '正在获取阵脚',self.pin_num,'的电位值，然而开发模式没有实体硬件'
         print '将返回-1'
         return -1
 
@@ -233,7 +232,7 @@ class ADC:
 
     def read(self):
         #return self.pin.board.analog_read(self.pin.pin_num)
-        print '正在尝试读取ADC',pin,'然而开发模式没有实体硬件'
+        print '正在尝试读取ADC',self.pin,'然而开发模式没有实体硬件'
         print '将返回-1'
         return -1
 
@@ -252,7 +251,7 @@ class DAC:
 
     def write(self, value):
         #self.pin.board.analog_write(self.pin.pin_num, value)
-        print '正在尝试读取DAC',pin,'然而开发模式没有实体硬件'
+        print '正在尝试写入DAC',pin,'然而开发模式没有实体硬件'
         print '将返回-1'
         return -1
 
@@ -271,8 +270,12 @@ class Servo:
         """
         pin_num, _ = check_pin_num(pin_num)
         self.pin_num = pin_num
-        self.board = PyMata(port, bluetooth=False, verbose=debug)
-        self.board.servo_config(pin_num)
+        #self.board = PyMata(port, bluetooth=False, verbose=debug)
+        #self.board.servo_config(pin_num)
+        print('正在初始化新的舵机（Servo）：')
+        print 'pin_num:',pin_num
+        print 'port:',port
+        print 'debug:',debug
 
     def angle(self, angle):
         """
