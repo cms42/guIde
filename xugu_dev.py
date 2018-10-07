@@ -251,7 +251,7 @@ class DAC:
 
     def write(self, value):
         #self.pin.board.analog_write(self.pin.pin_num, value)
-        print '正在尝试写入DAC',pin,'然而开发模式没有实体硬件'
+        print '正在尝试写入DAC',self.pin,'然而开发模式没有实体硬件'
         print '将返回-1'
         return -1
 
