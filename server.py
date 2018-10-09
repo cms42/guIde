@@ -34,3 +34,6 @@ if test_camera:
         cv2.imshow("capture", frame)
         if cv2.waitKey(1) & 0xFF == ord('q'):
             break
+
+from aip import AipFace
+client = AipFace('14381359',  'P0yGUXYuoAfslBDZhisKk0v6','fhmUxqSEAvPUl4DEM4Fzt3aj8G3ybmTb')
