@@ -94,10 +94,13 @@ class LED:
         :param port: 虚谷连接arduino的COM口，默认为"/dev/ttyACM0"
         :param debug: 当为True的时候，会输出debug信息
         """
-        self.pin_num = pin_num
-        self.board = PyMata(port, bluetooth=False, verbose=debug)
+        #self.pin_num = pin_num
+        #self.board = PyMata(port, bluetooth=False, verbose=debug)
         # 针脚设置为输出模式，数字信号类型
-        self.board.set_pin_mode(pin_num, self.board.OUTPUT, self.board.DIGITAL)
+        #self.board.set_pin_mode(pin_num, self.board.OUTPUT, self.board.DIGITAL)
+        print '正在初始化新的LED对象',self
+        print 'pin_num=',pin_num
+        print 'port=',port
 
     def light(self, value):
         """
@@ -106,12 +109,13 @@ class LED:
         灯为熄灭状态
         :return: 
         """
-        if value is True or value == 1:
-            self.board.digital_write(self.pin_num, 1)
-        elif value is False or value == 0:
-            self.board.digital_write(self.pin_num, 0)
-        else:
-            raise InvalidValueError("invalid value")
+        #if value is True or value == 1:
+        #    self.board.digital_write(self.pin_num, 1)
+        #elif value is False or value == 0:
+        #    self.board.digital_write(self.pin_num, 0)
+        #else:
+        #    raise InvalidValueError("invalid value")
+        print '正在将LED',self,'设置为',value
 
     def on(self):
         """
@@ -119,14 +123,16 @@ class LED:
         :return: 
         """
         # 给针脚一个高电位，灯会点亮
-        self.board.digital_write(self.pin_num, 1)
+        #self.board.digital_write(self.pin_num, 1)
+        print '正在点亮LED',self
 
     def high(self):
         """
         置高电位
         :return:
         """
-        self.board.digital_write(self.pin_num, 1)
+        #self.board.digital_write(self.pin_num, 1)
+        print '正在点亮LED',self
 
     def off(self):
         """
@@ -134,14 +140,16 @@ class LED:
         :return: 
         """
         # 给针脚一个低电位，灯会熄灭
-        self.board.digital_write(self.pin_num, 0)
+        # self.board.digital_write(self.pin_num, 0)
+        print '正在熄灭LED',self
 
     def low(self):
         """
         置低电位
         :return:
         """
-        self.board.digital_write(self.pin_num, 0)
+        #self.board.digital_write(self.pin_num, 0)
+        print '正在熄灭LED',self
 
 
 class Pin:
@@ -228,7 +236,7 @@ class ADC:
         :param pin:  Pin对象
         """
         self.pin = pin
-        print '正在初始化新的模拟数字转换器（ADC）：',pin
+        print '正在初始化新的模拟数字转换器（ADC）：',self
 
     def read(self):
         #return self.pin.board.analog_read(self.pin.pin_num)
@@ -247,7 +255,7 @@ class DAC:
         :param pin:  Pin对象
         """
         self.pin = pin
-        print '正在初始化新的数字模拟转换器（DAC）：',pin
+        print '正在初始化新的数字模拟转换器（DAC）：',self
 
     def write(self, value):
         #self.pin.board.analog_write(self.pin.pin_num, value)
@@ -272,7 +280,7 @@ class Servo:
         self.pin_num = pin_num
         #self.board = PyMata(port, bluetooth=False, verbose=debug)
         #self.board.servo_config(pin_num)
-        print('正在初始化新的舵机（Servo）：')
+        print '正在初始化新的舵机（Servo）',self
         print 'pin_num:',pin_num
         print 'port:',port
         print 'debug:',debug
@@ -283,7 +291,8 @@ class Servo:
         :param angle: 舵机转动角度
         :return: 
         """
-        self.board.analog_write(self.pin_num, angle)
+        #self.board.analog_write(self.pin_num, angle)
+        print '正在将舵机',self,'转动',angle,'度但是开发者模式将不会调用实体硬件'
 
     def speed(self, angle):
         """
@@ -292,7 +301,8 @@ class Servo:
         :return: 
         """
         while 1:
-            self.board.analog_write(self.pin_num, angle)
+            #self.board.analog_write(self.pin_num, angle)
+            print '正在将舵机',self,'转动',angle,'度但是开发者模式将不会调用实体硬件'
             time.sleep(0.5)
 
 
@@ -310,9 +320,14 @@ class I2C:
         :param port: 虚谷连接I2C设备的COM口，默认为"/dev/ttyACM0"
         :param debug: 当为True的时候，会输出debug信息
         """
-        self.board = PyMata(port, bluetooth=False, verbose=debug)
+        #self.board = PyMata(port, bluetooth=False, verbose=debug)
         # i2c设备初始化
-        self.i2c = self.board.i2c_config(0, pin_type, clk_pin, data_pin)
+        #self.i2c = self.board.i2c_config(0, pin_type, clk_pin, data_pin)
+        print '正在初始化新的I2C',self
+        print 'pin_type=',pin_type
+        print 'clk_pin=',clk_pin
+        print 'data_pin=',data_pin
+        print 'port=',port
 
     def read(self, addr=0x48, register=0, read_byte=2):
         """
@@ -323,17 +338,28 @@ class I2C:
         :return:
         """
         # 向i2c的一个地址发送一个信号
-        self.board.i2c_write(addr, PyMata.I2C_READ_CONTINUOUSLY)
-        time.sleep(0.5)
+        #self.board.i2c_write(addr, PyMata.I2C_READ_CONTINUOUSLY)
+        #time.sleep(0.5)
         # 读取这个地址的寄存器中缓存的数据
-        self.board.i2c_read(addr, register, read_byte, PyMata.I2C_READ)
-        time.sleep(0.5)
+        #self.board.i2c_read(addr, register, read_byte, PyMata.I2C_READ)
+        #time.sleep(0.5)
         # 获取该地址中的数据
-        data = self.board.i2c_get_read_data(addr)
-        return data
+        #data = self.board.i2c_get_read_data(addr)
+        #return data
+        print '正在获取I2C设备',self,'的数据'
+        print 'addr=',addr
+        print 'register=',register
+        print 'read_byte=',read_byte
+        print '然而开发者模式并没有实体硬件，将返回',1<<(read_byte*8-1)
+        return 1<<(read_byte*8-1)
 
     def write(self, value, addr=0x48, register=0):
-        self.board.i2c_write(addr, addr, register, value)
+        #self.board.i2c_write(addr, addr, register, value)
+        print '正在向I2C设备',self,'写入数据'
+        print 'value=',value
+        print 'addr=',addr
+        print 'register=',register
+        print ('然而开发者模式并没有实体硬件，我啥也不干')
 
 
 class XuguLog:
@@ -365,14 +391,49 @@ class SerialMgt:
     封装串口对象
     """
 
-    def __init__(self, port='/dev/ttyS2', baudrate=115200):
+    def __init__(self, port='/dev/ttyS2', baudrate=115200,config=None):
         """
 
         :param port: 虚谷连接PC的串口号，默认是'/dev/ttyS2'
         :param baudrate: 串口号速率，默认是115200
         """
-        self.ser = serial.Serial(port=port, baudrate=baudrate,
-                                 bytesize=8, timeout=5)
+        #self.ser = serial.Serial(port=port, baudrate=baudrate,
+        #                         bytesize=8, timeout=5)
+
+    def read(self, bytes=100):
+        """
+        从串口读取数据
+        :param bytes: 读取字节数
+        :return: 如果串口是打开状态，返回读取到的字节，如果是关闭的，返回空
+        """
+        if self.ser.isOpen():
+            return self.ser.read(bytes)
+        else:
+            return None
+
+    def write(self, data):
+        """
+        向串口写数据
+        :param data: 写入的数据
+        :return: 如果串口是打开状态，返回True，如果是关闭的，返回False
+        """
+        if self.ser.isOpen():
+            self.ser.write(data)
+            return True
+        else:
+            return False
+    """
+    封装串口对象
+    """
+
+    def __init__(self, port='/dev/ttyS2', baudrate=115200,config=None):
+        """
+
+        :param port: 虚谷连接PC的串口号，默认是'/dev/ttyS2'
+        :param baudrate: 串口号速率，默认是115200
+        """
+        #self.ser = serial.Serial(port=port, baudrate=baudrate,
+        #                         bytesize=8, timeout=5)
 
     def read(self, bytes=100):
         """
