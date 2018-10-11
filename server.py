@@ -1,5 +1,6 @@
 # -*- coding: UTF-8 -*-
 import sys
+import base64
 use_cv2=True
 dev = False
 test_camera=False
