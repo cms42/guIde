@@ -45,9 +45,13 @@ def get_face_info(img64):
 #            "image":img,
 #            "max_user_num":user_top_num,
 #            "liveness_control":"NORMAL"}
-    data={"company_id":"10000",
-          "access_token":access_token,
-          "img":img64}
+#    data={"company_id":"10000",
+#          "access_token":access_token,
+#          "img":img64}
+    data={"image_type":"BASE64",
+          "image":img,
+          "group_id_list":"test"
+    }
     try:
         response = requests.post(url,files=None,data=data)
         res_text=response.text
