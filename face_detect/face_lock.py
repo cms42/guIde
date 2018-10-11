@@ -64,7 +64,7 @@ def post_request(frame,face_num,nt):
         img64=cvimg_to_b64(frame)
         res=get_face_info(img64)
         try:
-            print(str(res["result"]["face_list"][0]["gender"]),str(res["result"]["face_list"][0]["beauty"]))
+            print(str(res())
         except Exception:
             pass
         time.sleep(3)
