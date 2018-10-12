@@ -68,7 +68,15 @@ def post_request(frame,face_num,nt):
         img64=cvimg_to_b64(frame)
         res=get_face_info(img64)
         try:
-            print(str(res))
+            #print(str(res))
+            if res['error_code']==0:
+                if res['error_msg']=='SUCCESS':
+                    result = res['result']
+                    #print(str(result))
+                    for face in result['user_list']:
+                        if face['score'] >=60.0:
+                            print('Face looks OK!')
+                            print(face['group_id'],':',face['user_id'])
         except Exception:
             pass
         time.sleep(3)
