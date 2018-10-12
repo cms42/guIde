@@ -49,7 +49,7 @@ def get_face_info(img64):
 #          "access_token":access_token,
 #          "img":img64}
     data={"image_type":"BASE64",
-          "image":img,
+          "image":img64,
           "group_id_list":"test"
     }
     try:
@@ -68,7 +68,7 @@ def post_request(frame,face_num,nt):
         img64=cvimg_to_b64(frame)
         res=get_face_info(img64)
         try:
-            print(str(res())
+            print(str(res))
         except Exception:
             pass
         time.sleep(3)
