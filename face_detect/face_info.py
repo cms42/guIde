@@ -50,6 +50,7 @@ def get_face_info(img64):
 #          "img":img64}
     data={"image_type":"BASE64",
           "image":img64,
+          "max_face_num":10,
           "face_field":"beauty,age",
     }
     try:
