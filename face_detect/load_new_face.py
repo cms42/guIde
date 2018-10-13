@@ -15,6 +15,7 @@ import base64
 import numpy as np
 
 access_token="24.24131eaf14f56d7ea563646f09d7d19a.2592000.1541851973.282335-14381359"
+#access_token="24.081c1804cdb7b78c3aeec57a4018ae87.2592000.1541994040.282335-14381359"
 face_num=0
 frame=None
 now_time=0
@@ -37,8 +38,8 @@ def cvimg_to_b64(img):
         return "error"
 
 
-def get_face_info(img64):
-    url="https://aip.baidubce.com/rest/2.0/face/v3/search"
+def upload_face(img64,uid,group_id,user_info):
+    url="https://aip.baidubce.com/rest/2.0/face/v3/faceset/user/add"
     url = url + "?access_token=" + access_token
 #    data = {"image_type":"BASE64",
 #            "group_id_list":group_id,
@@ -48,59 +49,36 @@ def get_face_info(img64):
 #    data={"company_id":"10000",
 #          "access_token":access_token,
 #          "img":img64}
-    data={"image_type":"BASE64",
-          "image":img64,
-          "group_id_list":"test"
+    data={
+                 "image_type":"BASE64",
+                 "image":img64,
+                 "user_id":uid,
+                 "group_id":group_id,
+                 "user_info":user_info
     }
+    headers={'content-type': 'application/x-www-form-urlencoded'}
     try:
-        response = requests.post(url,files=None,data=data)
+        #response = requests.post(url,files=None,data=data)
+        response = requests.post(url,data=data,headers=headers)
         res_text=response.text
         res_json=json.loads(res_text)
         return res_json
     except Exception:
         return "error"
+    time.sleep(1)
     
-def post_request(frame,face_num,nt):
-    if(face_num>0) and (time.time()-nt>3):
-        global now_time
-        now_time=time.time()
-        #print(now_time)
+def post_request(frame,uid,group_id,user_info):
         img64=cvimg_to_b64(frame)
-        res=get_face_info(img64)
+        res=upload_face(img64,uid,group_id,user_info)
         try:
-            #print(str(res))
+            print(str(res))
             if res['error_code']==0:
                 if res['error_msg']=='SUCCESS':
                     result = res['result']
                     #print(str(result))
-                    for face in result['user_list']:
-                        if face['score'] >=60.0:
-                            print('Face looks OK!')
-                            print('group id:',face['group_id'],'user id:',face['user_id'])
-                            print('score:',face['score'])
-                        else:
-                            print('ERROR:score<60')
-                            print(res)
-                else:
-                    print('ERROR:error_msg<>"SUCCESS"')
-                    print(res)
-            else:
-                print('ERROR:error_code<>0')
-                print(res)
+                    
         except Exception:
             pass
-        time.sleep(3)
-
-def faceDetect(img,face_cascade = cv2.CascadeClassifier('haarcascade_frontalface_default.xml')):
-    size=img.shape[:2]
-    divisor = 8
-    h,w=size
-    minSize=(w//divisor,h//divisor)
-    gray = cv2.cvtColor(img, cv2.COLOR_BGR2GRAY)
-    faces = face_cascade.detectMultiScale(gray, 1.2, 2,cv2.CASCADE_SCALE_IMAGE,minSize)
-    for (x,y,w,h) in faces:
-        cv2.rectangle(img,(x,y),(x+w,y+h),(255,0,0),2)
-    return img,len(faces)
 
 def main():
     cap = cv2.VideoCapture(0)
@@ -112,14 +90,20 @@ def main():
         #frame = imread("2017-02-26-200818.jpg")
         # Our operations on the frame come here
         if ret == True:
-            frame1,face_num = faceDetect(frame)
-            t=threading.Thread(target=post_request,args=(frame,face_num,now_time,), name='POST_REQUEST')
-            t.start()
+            cv2.imshow('frame',frame)
+            if cv2.waitKey(1) & 0xFF == ord('q'):
+                break
+            if cv2.waitKey(1) & 0xFF == ord('s'):
+                print('import your group:')
+                group_id= input()
+                print('import your name:')
+                uid = input()
+                print('import your user info:')
+                user_info = input()
+                post_request(frame,uid,group_id,user_info)
             
         # Display the resulting frame
-        cv2.imshow('frame',frame1)
-        if cv2.waitKey(1) & 0xFF == ord('q'):
-            break
+
     # When everything done, release the capture
     cap.release()
     cv2.destroyAllWindows()

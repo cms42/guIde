@@ -38,7 +38,7 @@ def cvimg_to_b64(img):
 
 
 def get_face_info(img64):
-    url="https://aip.baidubce.com/rest/2.0/face/v3/search"
+    url="https://aip.baidubce.com/rest/2.0/face/v3/detect"
     url = url + "?access_token=" + access_token
 #    data = {"image_type":"BASE64",
 #            "group_id_list":group_id,
@@ -49,8 +49,7 @@ def get_face_info(img64):
 #          "access_token":access_token,
 #          "img":img64}
     data={"image_type":"BASE64",
-          "image":img64,
-          "group_id_list":"test"
+          "image":img64
     }
     try:
         response = requests.post(url,files=None,data=data)
@@ -70,23 +69,7 @@ def post_request(frame,face_num,nt):
         try:
             #print(str(res))
             if res['error_code']==0:
-                if res['error_msg']=='SUCCESS':
-                    result = res['result']
-                    #print(str(result))
-                    for face in result['user_list']:
-                        if face['score'] >=60.0:
-                            print('Face looks OK!')
-                            print('group id:',face['group_id'],'user id:',face['user_id'])
-                            print('score:',face['score'])
-                        else:
-                            print('ERROR:score<60')
-                            print(res)
-                else:
-                    print('ERROR:error_msg<>"SUCCESS"')
-                    print(res)
-            else:
-                print('ERROR:error_code<>0')
-                print(res)
+                print(res['result'])
         except Exception:
             pass
         time.sleep(3)
