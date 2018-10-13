@@ -49,7 +49,8 @@ def get_face_info(img64):
 #          "access_token":access_token,
 #          "img":img64}
     data={"image_type":"BASE64",
-          "image":img64
+          "image":img64,
+          "face_field":"beauty,age",
     }
     try:
         response = requests.post(url,files=None,data=data)
@@ -69,7 +70,10 @@ def post_request(frame,face_num,nt):
         try:
             #print(str(res))
             if res['error_code']==0:
-                print(res['result'])
+                for face in res['result']['face_list']:
+                    print(str(face))
+            else:
+                print(str(res))
         except Exception:
             pass
         time.sleep(3)
