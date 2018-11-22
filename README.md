@@ -11,9 +11,13 @@
 客户端：运行于手机端
 
 #### 目录说明
+
 /xugu_docs:xugu的部分文件
+
 /face_detect:前导项目，纯python，命令行，实现简单功能
+
 /server:服务端代码
+
 /client:客户端代码
 
 #### 安装教程
