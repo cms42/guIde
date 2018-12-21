@@ -14,7 +14,7 @@ import time
 import base64
 import numpy as np
 
-access_token="24.24131eaf14f56d7ea563646f09d7d19a.2592000.1541851973.282335-14381359"
+access_token="24.d61c61e81e11b56418121341fcc670eb.2592000.1547989008.282335-14381359"
 face_num=0
 frame=None
 now_time=0
