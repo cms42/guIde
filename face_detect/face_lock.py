@@ -1,10 +1,5 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
-"""
-Created on Thu Oct 11 14:12:41 2018
-
-@author: james
-"""
 
 import cv2
 import requests
