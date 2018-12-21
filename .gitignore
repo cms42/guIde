@@ -112,3 +112,4 @@ dmypy.json
 
 BaiduAI_SDK_Python/
 tmp
+cert/
