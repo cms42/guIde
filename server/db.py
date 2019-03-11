@@ -22,7 +22,11 @@ class json_db:
         self.db=json.load(open(self.config["db_path"],'r'))
 
     def get(self,key):
-        return self.db[key]
+        try:
+            ret = self.db[key]
+        except Exception as e:
+            ret = "DB ERROR :"+str(e)
+        return ret
 
     def set(self,key,value):
         self.db[key]=value

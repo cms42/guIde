@@ -7,7 +7,7 @@ sys.path.append("../share")
 from face import face_sync
 from net import net_client_sync
 import json
-import cv2.cv2 as cv2
+import cv2
 import threading
 import base64
 import numpy as np
@@ -24,13 +24,15 @@ def faceDetect(img,face_cascade = cv2.CascadeClassifier('haarcascade_frontalface
         cv2.rectangle(img,(x,y),(x+w,y+h),(255,0,0),2)
     return img,len(faces)
 
-def post_request(frame,nt):
+def post_request(frame,nt,config):
     if (time.time()-nt>3):
         global now_time
         now_time=time.time()
         #print(now_time)
         fc=face_sync(config["face"])
-        res=fc.search_cvimg(frame,{0})
+        #print("FLAG1")
+        res=fc.search_cvimg(frame,"test")
+        #print("FLAG0")
         try:
             #print(str(res))
             if res['error_code']==0:
@@ -43,7 +45,8 @@ def post_request(frame,nt):
                             print('group id:',face['group_id'],'user id:',face['user_id'])
                             print('score:',face['score'])
                             nc=net_client_sync()
-                            nc.post_request(("127.0.0.1",9999),face['group_id']+face['user_id'])
+                            res=nc.send_recv(("127.0.0.1",9999),face['group_id']+':'+face['user_id'])
+                            print('server returns:',res)
                         else:
                             print('ERROR:score<60')
                             print(res)
@@ -71,7 +74,7 @@ if __name__ == "__main__":
         if ret == True:
             frame1,face_num = faceDetect(frame)
             if(face_num>0):
-                t=threading.Thread(target=post_request,args=(frame,now_time,), name='POST_REQUEST')
+                t=threading.Thread(target=post_request,args=(frame,now_time,config,), name='POST_REQUEST')
                 t.start()
         cv2.imshow('frame',frame1)
         if cv2.waitKey(1) & 0xFF == ord('q'):

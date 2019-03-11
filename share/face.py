@@ -8,8 +8,9 @@ sys.path.append("./")
 
 from aip import AipFace
 import base64
-import cv2.cv2 as cv2
+import cv2
 import numpy as np
+import json
 
 class face_sync:
     def __init__(self,config):
@@ -32,8 +33,8 @@ class face_sync:
             return base64_data
         except Exception as e:
             return "error",e
-    def search_b64img(self,img,groupIdList,options = {}):
+    def search_b64img(self,img,groupIdList):
         imageType="BASE64"
-        return self.client.search(img, imageType, groupIdList, options)
-    def search_cvimg(self,img,groupIdList,options = {}):
-        return self.search_b64img(self.cvimg_to_b64(img),groupIdList,options = {})
+        return self.client.search(img, imageType, groupIdList)
+    def search_cvimg(self,img,groupIdList):
+        return self.search_b64img(self.cvimg_to_b64(img),groupIdList)
