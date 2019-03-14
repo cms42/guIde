@@ -1,0 +1,5 @@
+Python=guIde_startup.py
+Arduino=
+SSID=
+SSID_PSD=
+
