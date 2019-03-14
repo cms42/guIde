@@ -12,6 +12,15 @@ import threading
 import base64
 import numpy as np
 import time
+import serial
+
+def display_by_LCD(ser,chn,delay_time=0):
+    if delay_time<=0:
+        ser.write(chn.encode("GB2312"))
+    else:
+        for i in range(len(chn)+1):
+            ser.write(chn[:i].encode("GB2312"))
+            time.sleep(delay_time)
 
 def faceDetect(img,face_cascade = cv2.CascadeClassifier('haarcascade_frontalface_default.xml')):
     size=img.shape[:2]
@@ -47,6 +56,7 @@ def post_request(frame,nt,config):
                             nc=net_client_sync()
                             res=nc.send_recv(("127.0.0.1",9999),face['group_id']+':'+face['user_id'])
                             print('server returns:',res)
+                            display_by_LCD(ser,res)
                         else:
                             print('ERROR:score<60')
                             print(res)
@@ -60,7 +70,14 @@ def post_request(frame,nt,config):
             pass
         time.sleep(3)
 
-if __name__ == "__main__":
+def main():
+    global ser
+    ser=serial.Serial("/dev/ttyS1",9600)
+    try:
+        ser.close()
+        ser.open()
+    except Exception:
+        pass
     if len(sys.argv)<2:
         config_name="config.json"
     else:
@@ -81,3 +98,7 @@ if __name__ == "__main__":
             break
     cap.release()
     cv2.destroyAllWindows()
+
+
+if __name__ == "__main__":
+    main()
