@@ -7,6 +7,7 @@ sys.path.append("../share")
 sys.path.append("./")
 
 from aip import AipFace
+from aip import AipSpeech
 import base64
 import cv2
 import numpy as np
@@ -38,3 +39,16 @@ class face_sync:
         return self.client.search(img, imageType, groupIdList)
     def search_cvimg(self,img,groupIdList):
         return self.search_b64img(self.cvimg_to_b64(img),groupIdList)
+
+class speech_sync:
+    class AipSpeechError(Exception):
+        """
+        无效参数错误
+        """
+        pass
+
+    def __init__(self,config):
+        APP_ID = config["APP_ID"]
+        API_KEY = config["API_KEY"]
+        SECRET_KEY = config["SECRET_KEY"]
+        self.client = AipSpeech(APP_ID, API_KEY, SECRET_KEY)
